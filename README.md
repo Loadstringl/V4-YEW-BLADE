@@ -1,11 +1,11 @@
--- [[ YEW AUTO PREMIUM - V3.4 完整整合版 ]]
+-- [[ YEW AUTO PREMIUM - V3.8 整合版 ]]
 local KEY_SECRET = "YEW-PRO-8829"
-local ARGON_KEY_VALUE = "VswDjVBSVWQaSnqAPzyXvKmfZgyZkdcw" -- 仅第二个脚本需要的 Key
+local ARGON_KEY_VALUE = "VswDjVBSVWQaSnqAPzyXvKmfZgyZkdcw" -- 你的 Luarmor Key
 local DISCORD_LINK = "https://discord.gg/66AGb5Xvy"
 
 local ScreenGui = Instance.new("ScreenGui", game:GetService("CoreGui"))
 local Main = Instance.new("Frame", ScreenGui)
-Main.Size = UDim2.new(0, 300, 0, 350) -- 调高了面板高度以容纳四个按钮
+Main.Size = UDim2.new(0, 300, 0, 350) 
 Main.Position = UDim2.new(0.5, -150, 0.5, -175)
 Main.BackgroundColor3 = Color3.fromRGB(20, 20, 25)
 Main.Active = true
@@ -19,7 +19,7 @@ Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.BackgroundTransparency = 1
 Title.Font = Enum.Font.GothamBold
 
--- [[ 锁钥匙面板组件 ]]
+-- [[ 登录面板 ]]
 local Input = Instance.new("TextBox", Main)
 Input.PlaceholderText = "输入 YEW 密钥..."
 Input.Position = UDim2.new(0.1, 0, 0.15, 0)
@@ -41,18 +41,18 @@ BtnGetKey.Size = UDim2.new(0.8, 0, 0, 40)
 BtnGetKey.BackgroundColor3 = Color3.fromRGB(60, 60, 70)
 BtnGetKey.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- [[ 脚本选择按钮 ]]
+-- [[ 脚本按钮 ]]
 local BtnWings = Instance.new("TextButton", Main)
 BtnWings.Text = "加载 Wings Hub"
 BtnWings.Position = UDim2.new(0.1, 0, 0.15, 0)
 BtnWings.Size = UDim2.new(0.8, 0, 0, 40)
 BtnWings.Visible = false
 
-local BtnBlade = Instance.new("TextButton", Main)
-BtnBlade.Text = "加载 Blade Ball Main"
-BtnBlade.Position = UDim2.new(0.1, 0, 0.32, 0)
-BtnBlade.Size = UDim2.new(0.8, 0, 0, 40)
-BtnBlade.Visible = false
+local BtnArgon = Instance.new("TextButton", Main)
+BtnArgon.Text = "加载 Argon Hub"
+BtnArgon.Position = UDim2.new(0.1, 0, 0.32, 0)
+BtnArgon.Size = UDim2.new(0.8, 0, 0, 40)
+BtnArgon.Visible = false
 
 local BtnFPS = Instance.new("TextButton", Main)
 BtnFPS.Text = "加载 Syrenix FPS"
@@ -66,8 +66,7 @@ BtnSpam.Position = UDim2.new(0.1, 0, 0.66, 0)
 BtnSpam.Size = UDim2.new(0.8, 0, 0, 40)
 BtnSpam.Visible = false
 
--- 统一样式
-for _, btn in pairs({BtnWings, BtnBlade, BtnFPS, BtnSpam}) do
+for _, btn in pairs({BtnWings, BtnArgon, BtnFPS, BtnSpam}) do
     btn.BackgroundColor3 = Color3.fromRGB(45, 45, 50)
     btn.TextColor3 = Color3.fromRGB(255, 255, 255)
     btn.Parent = Main
@@ -86,7 +85,7 @@ VerifyBtn.MouseButton1Click:Connect(function()
     if Input.Text:gsub("%s+", "") == KEY_SECRET then
         VerifyBtn.Visible, Input.Visible, BtnGetKey.Visible = false, false, false
         Title.Text = "V3 - 选择功能"
-        BtnWings.Visible, BtnBlade.Visible, BtnFPS.Visible, BtnSpam.Visible = true, true, true, true
+        BtnWings.Visible, BtnArgon.Visible, BtnFPS.Visible, BtnSpam.Visible = true, true, true, true
     else
         VerifyBtn.Text = "密钥不匹配！"
         task.wait(1)
@@ -100,11 +99,15 @@ BtnWings.MouseButton1Click:Connect(function()
     loadstring(game:HttpGet("https://wings.ac/loader"))()
 end)
 
--- 2. Blade Ball (带密码自动存入剪辑版)
-BtnBlade.MouseButton1Click:Connect(function()
+-- 2. Argon Hub (Luarmor 方式)
+BtnArgon.MouseButton1Click:Connect(function()
+    -- 自动复制 Key 到剪贴板以防万一
     if setclipboard then setclipboard(ARGON_KEY_VALUE) end
     ScreenGui:Destroy()
-    loadstring(request({Url="https://raw.githubusercontent.com/AchaoticSoftworksCore/AchaoticSources/refs/heads/main/BladeBall/Main.luau"}).Body)()
+    
+    -- 你要求的真正的 Luarmor 加载代码
+    script_key = ARGON_KEY_VALUE
+    loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/4109f8447808f89121335990a22ed888.lua"))()
 end)
 
 -- 3. Syrenix FPS
@@ -113,9 +116,10 @@ BtnFPS.MouseButton1Click:Connect(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/FRAXXontop/Syrenixscriptz/refs/heads/main/SyrenixFPS.lua"))()
 end)
 
--- 4. YEW SPAM (原封不动放回来)
+-- 4. YEW SPAM
 BtnSpam.MouseButton1Click:Connect(function()
     ScreenGui:Destroy()
+    -- 这里保留你原始的 YEW SPAM Hook 代码逻辑
     local gui, frame, button = Instance.new("ScreenGui", game:GetService("CoreGui")), Instance.new("Frame"), Instance.new("TextButton")
     local stroke = Instance.new("UIStroke")
     gui.ResetOnSpawn = false
@@ -183,5 +187,6 @@ BtnSpam.MouseButton1Click:Connect(function()
         toggleSpam()
     end)
 end)
+
 # V4-YEW-BLADE
 Blade ball
